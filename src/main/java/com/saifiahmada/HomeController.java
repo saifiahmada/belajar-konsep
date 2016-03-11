@@ -12,11 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.saifiahmada.entity.Book;
+import com.saifiahmada.entity.Child;
 import com.saifiahmada.entity.Dosen;
 import com.saifiahmada.entity.Jadwal;
+import com.saifiahmada.entity.Parent;
 import com.saifiahmada.service.BookService;
 import com.saifiahmada.service.DosenService;
 import com.saifiahmada.service.JadwalService;
+import com.saifiahmada.service.ParentService;
 
 @Controller
 public class HomeController {
@@ -29,6 +32,9 @@ public class HomeController {
 	
 	@Autowired
 	private JadwalService jadwalService;
+	
+	@Autowired
+	private ParentService parentService;
 	
 	@RequestMapping("/")
 	@ResponseBody
@@ -101,24 +107,24 @@ public class HomeController {
 	@RequestMapping("/simpan")
 	@ResponseBody
 	public String saveAll(){
-		List<Dosen> dosens = new ArrayList<Dosen>();
-		Dosen d1 = new Dosen();
-		d1.setId("D1");
-		d1.setNama("NAMA D1");
-		dosens.add(d1);
-		Dosen d2 = new Dosen();
-		d2.setId("D2");
-		d2.setNama("NAMA D2");
-		dosens.add(d2);
 		
-		Jadwal jadwal = new Jadwal();
-		jadwal.setId("ID1");
-		jadwal.setNama("NAMA JADWAL 1");
-		jadwal.setDosens(dosens); 
-		
-		jadwalService.save(jadwal); 
+		Parent parent = new Parent();
+		parent.setId(1L);
+		Child c1 = new Child();
+		c1.setParent(parent);
+		c1.setId(1L);
+		parent.addToChildren(c1);
+		parentService.save(parent);
 		
 		return "OK";
+	}
+	
+	@RequestMapping("/lihat")
+	@ResponseBody
+	public String lihat() {
+		System.out.println(" jumlah " + parentService.findAll().size()); 
+		
+		return parentService.findAll().toString();
 	}
 	
 	
